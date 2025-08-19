@@ -8,6 +8,8 @@ const tabuleiro = [
   [0, 0, 1, 1, 1, 0, 0],
 ];
 
+let pecaSelecionada = null;
+
 export function getTabuleiro() {
   return [...tabuleiro];
 }
@@ -66,4 +68,35 @@ export function moverPeca(
   }
 
   return true;
+}
+
+
+
+export function selecionaPeca(linha, coluna) {
+ 
+  if (pecaSelecionada === null) {
+    if (tabuleiro[linha][coluna] === 1) {
+      pecaSelecionada = { linha, coluna };
+      return { status: "selecionada", posicao: pecaSelecionada };
+    }
+    return { status: "invalido" }; 
+  }
+
+  
+  if (pecaSelecionada.linha === linha && pecaSelecionada.coluna === coluna) {
+    pecaSelecionada = null;
+    return { status: "desmarcada" };
+  }
+
+
+  const origem = pecaSelecionada;
+  const sucesso = moverPeca(origem.linha, origem.coluna, linha, coluna);
+
+  pecaSelecionada = null; 
+  
+  if (sucesso) {
+    return { status: "movido", origem, destino: { linha, coluna } };
+  } else {
+    return { status: "falha" };
+  }
 }
