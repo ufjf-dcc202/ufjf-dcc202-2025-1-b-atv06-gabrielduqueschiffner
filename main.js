@@ -1,6 +1,6 @@
 // main.js
 
-import { getTabuleiro } from "./peca.js";
+import { getTabuleiro, selecionaPeca } from "./peca.js";
 
 const tabuleiro = getTabuleiro();
 
@@ -48,4 +48,15 @@ for (let i = 0; i < 7; i++) {
 
     tab.appendChild(celula);
   }
+}
+
+function atualizaPecaSelecionada(peca) {
+  const tabuleiro = getTabuleiro();
+  for
+}
+
+function pecaClick(evento){
+   const posicao = Number(evento.target.dataset.posicao);
+   selecionaPeca(posicao);
+   atualizaPecaSelecionada();
 }
