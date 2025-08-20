@@ -1,18 +1,31 @@
+//peca.js
+
 const tabuleiro = [
-  [0, 0, 1, 1, 1, 0, 0],
-  [0, 0, 1, 1, 1, 0, 0],
+  [-1, -1, 1, 1, 1, -1, -1],
+  [-1, -1, 1, 1, 1, -1, -1],
   [1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 0, 1, 1, 1],
+  [1, 1, 1,0, 1, 1, 1],
   [1, 1, 1, 1, 1, 1, 1],
-  [0, 0, 1, 1, 1, 0, 0],
-  [0, 0, 1, 1, 1, 0, 0],
+  [-1, -1, 1, 1, 1, -1, -1],
+  [-1, -1, 1, 1, 1, -1, -1],
 ];
 
 let pecaSelecionada = null;
 
 export function getTabuleiro() {
-  return [...tabuleiro];
+  return tabuleiro.map(linha => [...linha]);
 }
+
+export function posicaoValida(linha, coluna) {
+  return (
+    linha >= 0 &&
+    linha < 7 &&
+    coluna >= 0 &&
+    coluna < 7 &&
+    tabuleiro[linha][coluna] !== -1
+  );
+}
+
 
 /**
  * Move uma peça no tabuleiro.
@@ -64,7 +77,7 @@ export function moverPeca(
   ) {
     const meioLinha = (origemLinha + destinoLinha) / 2;
     const meioColuna = (origemColuna + destinoColuna) / 2;
-    tabuleiro[meioLinha][meioColuna] = 0; // Remove a peça pulada
+    tabuleiro[meioLinha][meioColuna] = 0; 
   }
 
   return true;
@@ -93,7 +106,7 @@ export function selecionaPeca(linha, coluna) {
   const sucesso = moverPeca(origem.linha, origem.coluna, linha, coluna);
 
   pecaSelecionada = null; 
-  
+
   if (sucesso) {
     return { status: "movido", origem, destino: { linha, coluna } };
   } else {
