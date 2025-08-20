@@ -1,13 +1,9 @@
 // main.js
-
 import { getTabuleiro, selecionaPeca } from "./peca.js";
-
-const tabuleiro = getTabuleiro();
 
 function criaTabuleiro() {
   const tabuleiro = document.createElement("div");
   tabuleiro.classList.add("tabuleiro");
-
   return tabuleiro;
 }
 
@@ -18,45 +14,55 @@ function criaCelula(posicao) {
   return celula;
 }
 
-function criaPeca(cor, posicao) {
+function criaPeca(cor) {
   const peca = document.createElement("div");
   peca.classList.add("peca", cor);
-  peca.dataset.posicao = posicao;
   return peca;
 }
 
+// container DOM do tabuleiro
 const tab = criaTabuleiro();
 document.body.appendChild(tab);
 
-for (let i = 0; i < 7; i++) {
-  for (let j = 0; j < 7; j++) {
-    const posicao = `${i}-${j}`;
-    const celula = criaCelula(posicao);
+function renderizaTudo() {
+  const estado = getTabuleiro();   // estado do jogo (MATRIZ)
+  tab.innerHTML = "";              // limpa o DOM 
 
-    // checa se é posição inválida (fora da cruz)
-    if ((i < 2 || i > 4) && (j < 2 || j > 4)) {
-      celula.classList.add("transparente");
+  for (let i = 0; i < 7; i++) {
+    for (let j = 0; j < 7; j++) {
+      const posicao = `${i}-${j}`;
+      const celula = criaCelula(posicao);
+
+      // fora da cruz, xispa criatura maligna
+      if ((i < 2 || i > 4) && (j < 2 || j > 4)) {
+        celula.classList.add("transparente");
+        tab.appendChild(celula); // append no DOM
+        continue;
+      }
+
+      celula.classList.add("casa");
+
+      if (estado[i][j] === 1) {
+        celula.appendChild(criaPeca("preto"));
+      } else {
+        celula.classList.add("branco");
+      }
+
       tab.appendChild(celula);
-      continue;
     }
-
-    if (tabuleiro[i][j] === 1) {
-      const corPeca = "preto";
-      const peca = criaPeca(corPeca, posicao);
-      celula.appendChild(peca);
-    }
-
-    tab.appendChild(celula);
   }
 }
+renderizaTudo();
 
-function atualizaPecaSelecionada(peca) {
-  const tabuleiro = getTabuleiro();
-  for
-}
+tab.addEventListener("click", function (evento) {
+  const celula = evento.target.closest(".celula");
+  if (!celula || !tab.contains(celula)) return;
+  const [i, j] = celula.dataset.posicao.split("-").map(Number);
 
-function pecaClick(evento){
-   const posicao = Number(evento.target.dataset.posicao);
-   selecionaPeca(posicao);
-   atualizaPecaSelecionada();
-}
+  selecionaPeca(i, j);   // altera o tabuleiro interno em peca.js
+
+  // redesenha a partir do estado atualizado
+  renderizaTudo();
+});
+
+

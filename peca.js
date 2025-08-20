@@ -35,52 +35,37 @@ export function posicaoValida(linha, coluna) {
  * @returns {boolean} True se o movimento foi realizado, false caso contrário.
  */
 
-export function moverPeca(
-  origemLinha,
-  origemColuna,
-  destinoLinha,
-  destinoColuna
-) {
-  if (tabuleiro[destinoLinha][destinoColuna] !== 0) return false;
-  if (
-    Math.abs(destinoLinha - origemLinha) > 2 ||
-    Math.abs(destinoColuna - origemColuna) > 2
-  )
-    return false;
-  if (
-    Math.abs(destinoLinha - origemLinha) === 2 &&
-    Math.abs(destinoColuna - origemColuna) === 2
-  ) {
-    const meioLinha = (origemLinha + destinoLinha) / 2;
-    const meioColuna = (origemColuna + destinoColuna) / 2;
-    if (tabuleiro[meioLinha][meioColuna] !== 1) return false;
-  } else if (
-    Math.abs(destinoLinha - origemLinha) === 1 &&
-    Math.abs(destinoColuna - origemColuna) === 1
-  ) {
-    if (tabuleiro[destinoLinha][destinoColuna] !== 0) return false;
-  } else {
-    if (
-      tabuleiro[destinoLinha][destinoColuna] !== 0 ||
-      tabuleiro[origemLinha][origemColuna] !== 1
-    )
-      return false;
-  }
 
-  tabuleiro[destinoLinha][destinoColuna] = 1;
+export function moverPeca(origemLinha, origemColuna, destinoLinha, destinoColuna) {
+  // valida posições no tabuleiro
+  if (!posicaoValida(origemLinha, origemColuna) || !posicaoValida(destinoLinha, destinoColuna)) return false;
+
+  // origem precisa ter peça e destino precisa estar vazio
+  if (tabuleiro[origemLinha][origemColuna] !== 1 || tabuleiro[destinoLinha][destinoColuna] !== 0) return false;
+
+  const dL = destinoLinha - origemLinha;
+  const dC = destinoColuna - origemColuna;
+
+  // só permite movimento cimabaixo e lados exatamente 2 casas (não diagonal)
+  const moveVertical = Math.abs(dL) === 2 && dC === 0;
+  const moveHorizontal = Math.abs(dC) === 2 && dL === 0;
+  if (!moveVertical && !moveHorizontal) return false;
+
+  // posição do meio
+  const meioLinha = origemLinha + dL / 2;
+  const meioColuna = origemColuna + dC / 2;
+
+  // precisa haver peça no meio
+  if (tabuleiro[meioLinha][meioColuna] !== 1) return false;
+
+  // executa movimento
   tabuleiro[origemLinha][origemColuna] = 0;
-
-  if (
-    Math.abs(destinoLinha - origemLinha) === 2 &&
-    Math.abs(destinoColuna - origemColuna) === 2
-  ) {
-    const meioLinha = (origemLinha + destinoLinha) / 2;
-    const meioColuna = (origemColuna + destinoColuna) / 2;
-    tabuleiro[meioLinha][meioColuna] = 0;
-  }
+  tabuleiro[meioLinha][meioColuna] = 0;
+  tabuleiro[destinoLinha][destinoColuna] = 1;
 
   return true;
 }
+
 
 export function selecionaPeca(linha, coluna) {
   if (!posicaoValida(linha, coluna)) {
