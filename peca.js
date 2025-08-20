@@ -4,7 +4,7 @@ const tabuleiro = [
   [-1, -1, 1, 1, 1, -1, -1],
   [-1, -1, 1, 1, 1, -1, -1],
   [1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1,0, 1, 1, 1],
+  [1, 1, 1, 0, 1, 1, 1],
   [1, 1, 1, 1, 1, 1, 1],
   [-1, -1, 1, 1, 1, -1, -1],
   [-1, -1, 1, 1, 1, -1, -1],
@@ -13,7 +13,7 @@ const tabuleiro = [
 let pecaSelecionada = null;
 
 export function getTabuleiro() {
-  return tabuleiro.map(linha => [...linha]);
+  return tabuleiro.map((linha) => [...linha]);
 }
 
 export function posicaoValida(linha, coluna) {
@@ -25,7 +25,6 @@ export function posicaoValida(linha, coluna) {
     tabuleiro[linha][coluna] !== -1
   );
 }
-
 
 /**
  * Move uma peça no tabuleiro.
@@ -77,41 +76,34 @@ export function moverPeca(
   ) {
     const meioLinha = (origemLinha + destinoLinha) / 2;
     const meioColuna = (origemColuna + destinoColuna) / 2;
-    tabuleiro[meioLinha][meioColuna] = 0; 
+    tabuleiro[meioLinha][meioColuna] = 0;
   }
 
   return true;
 }
 
-
-
 export function selecionaPeca(linha, coluna) {
- 
-    if (!posicaoValida(linha, coluna)) {
+  if (!posicaoValida(linha, coluna)) {
     return { status: "invalido" };
   }
-
 
   if (pecaSelecionada === null) {
     if (tabuleiro[linha][coluna] === 1) {
       pecaSelecionada = { linha, coluna };
       return { status: "selecionada", posicao: pecaSelecionada };
     }
-    return { status: "invalido" }; 
+    return { status: "invalido" };
   }
 
-  
   if (pecaSelecionada.linha === linha && pecaSelecionada.coluna === coluna) {
     pecaSelecionada = null;
     return { status: "desmarcada" };
   }
 
-
- 
   const origem = pecaSelecionada;
   const sucesso = moverPeca(origem.linha, origem.coluna, linha, coluna);
 
-  pecaSelecionada = null; 
+  pecaSelecionada = null;
 
   if (sucesso) {
     return { status: "movido", origem, destino: { linha, coluna } };
