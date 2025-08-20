@@ -48,3 +48,18 @@ h1 {
     height: 50px;
     display: flex;
 }
+
+.peca:hover {
+    background-color: #555;
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.peca.selected {
+    background-color: #f00;
+}
+
+.peca.vazio {
+    background-color: #ad3434;
+    border-style: dashed;
+}
