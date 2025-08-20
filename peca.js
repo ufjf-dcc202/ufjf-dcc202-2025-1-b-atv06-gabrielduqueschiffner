@@ -87,6 +87,11 @@ export function moverPeca(
 
 export function selecionaPeca(linha, coluna) {
  
+    if (!posicaoValida(linha, coluna)) {
+    return { status: "invalido" };
+  }
+
+
   if (pecaSelecionada === null) {
     if (tabuleiro[linha][coluna] === 1) {
       pecaSelecionada = { linha, coluna };
@@ -102,6 +107,7 @@ export function selecionaPeca(linha, coluna) {
   }
 
 
+ 
   const origem = pecaSelecionada;
   const sucesso = moverPeca(origem.linha, origem.coluna, linha, coluna);
 
